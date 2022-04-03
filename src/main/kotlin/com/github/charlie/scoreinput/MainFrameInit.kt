@@ -19,7 +19,7 @@ lateinit var pointFreeItem: JCheckBoxMenuItem
 
 fun prepareMainFrame() {
     spaceFreeItem = JCheckBoxMenuItem("免空格录入").apply { state = true }
-    pointFreeItem = JCheckBoxMenuItem("免小数点录入").apply { state = true }
+    pointFreeItem = JCheckBoxMenuItem("免小数点录入").apply { state = false }
     mainFrame = MainFrame()
     initMenu()
     initTable()
