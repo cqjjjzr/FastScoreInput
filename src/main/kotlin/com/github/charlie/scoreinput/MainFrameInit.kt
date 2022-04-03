@@ -141,7 +141,7 @@ private fun acceptInput(e: EventObject) {
 }
 
 fun parseScore(s: String): Float {
-    if (s.contains('.') || !spaceFreeItem.state) return s.toFloat()
+    if (s.contains('.') || !pointFreeItem.state) return s.toFloat()
     if (s.startsWith("1") && s.length == 4) return (s.substring(0, 3) + "." + s.substring(3)).toFloat()
     if (s.length == 3 && !s.startsWith("1")) return (s.substring(0, 2) + "." + s.substring(2)).toFloat()
     return s.toFloat()
