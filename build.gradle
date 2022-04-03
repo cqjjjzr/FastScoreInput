@@ -1,0 +1,86 @@
+buildscript {
+    ext.kotlin_version = '1.6.10'
+
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+group 'com.github.cqjjjzr'
+version 'rv4'
+
+apply plugin: 'java'
+apply plugin: 'kotlin'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // GUI support
+    implementation (group: 'com.intellij', name: 'forms_rt', version: '7.0.3') {
+        transitive = false
+    }
+    implementation group: 'org.apache.poi', name: 'poi', version: '5.2.2'
+    implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '5.2.2'
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    testImplementation group: 'junit', name: 'junit', version: '4.12'
+}
+
+
+//javaModule.name = 'FastScoreInput.main'
+
+compileKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+compileTestKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+
+task fatJar(type: Jar) {
+    manifest {
+        attributes 'Main-Class': 'com.github.charlie.scoreinput.MainFrameInit'
+    }
+    archiveBaseName = project.name + '-all'
+
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+
+    with jar
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'com.github.charlie.scoreinput.MainFrameInit'
+    }
+}
+
+task copyRuntimeLibs(type: Copy) {
+    into "build/libs"
+    from configurations.implementation
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
+
+task createProperties(dependsOn: processResources) {
+    doLast {
+        new File("$buildDir/resources/main/version.properties").withWriter { w ->
+            Properties p = new Properties()
+            p['version'] = project.version.toString()
+            p.store w, null
+        }
+    }
+}
+
+classes {
+    dependsOn createProperties
+}
