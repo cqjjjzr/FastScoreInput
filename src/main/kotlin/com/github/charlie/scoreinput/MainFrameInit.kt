@@ -179,12 +179,13 @@ class ScoreTableModel: AbstractTableModel() {
     }
 }
 
+object Dummy
 fun main() {
     UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName())
 
     val version = Properties().run {
         try {
-            load(javaClass.getResourceAsStream("version.property"))
+            load(Dummy::class.java.getResourceAsStream("/version.properties"))
             return@run getProperty("version", "unknown version")
         } catch (ex: Exception) {
             return@run "unknown version"
